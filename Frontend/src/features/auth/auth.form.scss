@@ -37,6 +37,16 @@ main{
         }
     }
 
+    .error-message {
+        background-color: rgba(225, 3, 77, 0.1);
+        border: 1px solid #e1034d;
+        color: #ff4d6d;
+        padding: 0.75rem;
+        border-radius: 0.75rem;
+        font-size: 0.875rem;
+        text-align: center;
+    }
+
     a{
         color: #e1034d;
         text-decoration: none;

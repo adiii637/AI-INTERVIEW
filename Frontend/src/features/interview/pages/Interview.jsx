@@ -59,14 +59,8 @@ const RoadMapDay = ({ day }) => (
 // ── Main Component ────────────────────────────────────────────────────────────
 const Interview = () => {
     const [ activeNav, setActiveNav ] = useState('technical')
-    const { report, getReportById, loading, getResumePdf } = useInterview()
+    const { report, loading, getResumePdf } = useInterview()
     const { interviewId } = useParams()
-
-    useEffect(() => {
-        if (interviewId) {
-            getReportById(interviewId)
-        }
-    }, [ interviewId ])
 
 
 
