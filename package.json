@@ -2,6 +2,9 @@
   "name": "ai-interview-monorepo",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "build": "cd Frontend && npm install && npm run build"
+  },
   "dependencies": {
     "@google/genai": "^2.10.0",
     "@sparticuz/chromium": "^123.0.0",
