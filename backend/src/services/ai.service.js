@@ -1,7 +1,15 @@
 const { GoogleGenAI } = require("@google/genai")
 const { z } = require("zod")
 const { zodToJsonSchema } = require("zod-to-json-schema")
-const puppeteer = require("puppeteer")
+let puppeteer;
+let chromium;
+
+if (process.env.VERCEL) {
+    puppeteer = require("puppeteer-core");
+    chromium = require("@sparticuz/chromium");
+} else {
+    puppeteer = require("puppeteer");
+}
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GENAI_API_KEY
@@ -58,7 +66,22 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
 
 
 async function generatePdfFromHtml(htmlContent) {
-    const browser = await puppeteer.launch()
+    let options = {};
+    if (process.env.VERCEL) {
+        options = {
+            args: chromium.args,
+            defaultViewport: chromium.defaultViewport,
+            executablePath: await chromium.executablePath(),
+            headless: chromium.headless,
+            ignoreHTTPSErrors: true,
+        };
+    } else {
+        options = {
+            headless: "new"
+        };
+    }
+
+    const browser = await puppeteer.launch(options)
     const page = await browser.newPage();
     await page.setContent(htmlContent, { waitUntil: "networkidle0" })
 

@@ -1,8 +1,10 @@
 const mongoose = require("mongoose")
 
-
-
 async function connectToDB() {
+    if (mongoose.connection.readyState >= 1) {
+        console.log("Reusing existing Database connection")
+        return
+    }
 
     try {
         await mongoose.connect(process.env.MONGO_URI)
