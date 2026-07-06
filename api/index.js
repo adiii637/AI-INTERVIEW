@@ -1,6 +1,21 @@
-const app = require("../backend/src/app")
-const connectToDB = require("../backend/src/config/database")
+let app;
+let startupError;
 
-connectToDB()
+try {
+    const connectToDB = require("../backend/src/config/database")
+    connectToDB()
+    app = require("../backend/src/app")
+} catch (err) {
+    startupError = err;
+}
 
-module.exports = app
+module.exports = (req, res) => {
+    if (startupError) {
+        return res.status(500).json({
+            error: "Startup Crash",
+            message: startupError.message,
+            stack: startupError.stack
+        });
+    }
+    return app(req, res);
+};
