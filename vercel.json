@@ -9,11 +9,19 @@
       }
     },
     {
+      "src": "backend/test.js",
+      "use": "@vercel/node"
+    },
+    {
       "src": "backend/server.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
+    {
+      "src": "/api/test",
+      "dest": "backend/test.js"
+    },
     {
       "src": "/api/(.*)",
       "dest": "backend/server.js"
