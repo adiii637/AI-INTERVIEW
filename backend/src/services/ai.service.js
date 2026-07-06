@@ -4,13 +4,6 @@ const { zodToJsonSchema } = require("zod-to-json-schema")
 let puppeteer;
 let chromium;
 
-if (process.env.VERCEL) {
-    puppeteer = require("puppeteer-core");
-    chromium = require("@sparticuz/chromium");
-} else {
-    puppeteer = require("puppeteer");
-}
-
 const ai = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GENAI_API_KEY
 })
@@ -66,6 +59,15 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
 
 
 async function generatePdfFromHtml(htmlContent) {
+    if (!puppeteer) {
+        if (process.env.VERCEL) {
+            puppeteer = require("puppeteer-core");
+            chromium = require("@sparticuz/chromium");
+        } else {
+            puppeteer = require("puppeteer");
+        }
+    }
+
     let options = {};
     if (process.env.VERCEL) {
         options = {
