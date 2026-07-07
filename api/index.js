@@ -2,8 +2,6 @@ let app;
 let startupError;
 
 try {
-    const connectToDB = require("../backend/src/config/database")
-    connectToDB()
     app = require("../backend/src/app")
 } catch (err) {
     startupError = err;

@@ -29,6 +29,20 @@ app.use(cors({
     credentials: true
 }))
 
+const connectToDB = require("./config/database")
+
+app.use(async (req, res, next) => {
+    try {
+        await connectToDB()
+        next()
+    } catch (err) {
+        res.status(500).json({
+            error: "Database Connection Error",
+            message: err.message
+        })
+    }
+})
+
 /* require all the routes here */
 const authRouter = require("./routes/auth.routes")
 const interviewRouter = require("./routes/interview.routes")
