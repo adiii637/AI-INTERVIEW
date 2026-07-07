@@ -2,7 +2,7 @@ let app;
 let startupError;
 
 try {
-    app = require("../backend/src/app")
+    app = require("../backend/src/app");
 } catch (err) {
     startupError = err;
 }

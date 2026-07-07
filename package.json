@@ -2,6 +2,9 @@
   "name": "ai-interview-monorepo",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "build": "cd Frontend && npm install && npm run build"
   },

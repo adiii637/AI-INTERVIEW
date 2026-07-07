@@ -61,8 +61,12 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
 async function generatePdfFromHtml(htmlContent) {
     if (!puppeteer) {
         if (process.env.VERCEL) {
-            puppeteer = require("puppeteer-core");
-            chromium = require("@sparticuz/chromium");
+            // Use variable names so Vercel's static file tracer cannot bundle these 
+            // heavy packages (~60MB Chromium) into the serverless function
+            const puppeteerPkg = "puppeteer-core";
+            const chromiumPkg = "@sparticuz/chromium";
+            puppeteer = require(puppeteerPkg);
+            chromium = require(chromiumPkg);
         } else {
             puppeteer = require("puppeteer");
         }

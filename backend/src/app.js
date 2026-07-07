@@ -8,6 +8,7 @@
  const express = require("express")
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
+const connectToDB = require("./config/database")
 
 const app = express()
 
@@ -29,13 +30,13 @@ app.use(cors({
     credentials: true
 }))
 
-const connectToDB = require("./config/database")
-
+/* database connection middleware - runs on every request */
 app.use(async (req, res, next) => {
     try {
         await connectToDB()
         next()
     } catch (err) {
+        console.error("DB connection failed:", err.message)
         res.status(500).json({
             error: "Database Connection Error",
             message: err.message
