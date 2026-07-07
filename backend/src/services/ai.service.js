@@ -40,10 +40,16 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
                         Resume: ${resume}
                         Self Description: ${selfDescription}
                         Job Description: ${jobDescription}
+
+                    Constraints:
+                    - Generate exactly 3 technical questions.
+                    - Generate exactly 2 behavioral questions.
+                    - Keep answers, intentions, and task lists extremely concise, short, and brief (maximum 1-2 sentences each).
+                    - Generate a compact 3-day preparation plan (exactly 3 days).
 `
 
     const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: prompt,
         config: {
             responseMimeType: "application/json",
@@ -125,7 +131,7 @@ async function generateResumePdf({ resume, selfDescription, jobDescription }) {
                     `
 
     const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: prompt,
         config: {
             responseMimeType: "application/json",
