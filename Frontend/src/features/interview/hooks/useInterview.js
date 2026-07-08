@@ -2,6 +2,7 @@ import { getAllInterviewReports, generateInterviewReport, getInterviewReportById
 import { useContext, useEffect } from "react"
 import { InterviewContext } from "../interview.context"
 import { useParams } from "react-router"
+import html2pdf from "html2pdf.js"
 
 
 export const useInterview = () => {
@@ -68,16 +69,23 @@ export const useInterview = () => {
         try {
             const data = await generateResumePdf({ interviewReportId })
             if (data && data.html) {
-                const printWindow = window.open("", "_blank")
-                printWindow.document.write(data.html)
-                printWindow.document.close()
-                printWindow.focus()
+                const element = document.createElement("div")
+                element.innerHTML = data.html
                 
-                // Slight timeout to let layout paint before opening print dialog
-                setTimeout(() => {
-                    printWindow.print()
-                    printWindow.close()
-                }, 300)
+                // Configure options for A4 high quality layout
+                const opt = {
+                    margin: 10,
+                    filename: `resume_${interviewReportId}.pdf`,
+                    image: { type: "jpeg", quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+                }
+
+                // Generate and save PDF directly to Downloads folder
+                await html2pdf().set(opt).from(element).save()
+                
+                // Alert popup to notify the user
+                alert("Your resume has been successfully downloaded!")
             }
         }
         catch (error) {
