@@ -3,10 +3,11 @@ import { useContext, useEffect } from "react"
 import { InterviewContext } from "../interview.context"
 import { useParams } from "react-router"
 import html2pdf from "html2pdf.js"
+import { useAuth } from "../../auth/hooks/useAuth"
 
 
 export const useInterview = () => {
-
+    const { user } = useAuth()
     const context = useContext(InterviewContext)
     const { interviewId } = useParams()
 
@@ -72,10 +73,14 @@ export const useInterview = () => {
                 const element = document.createElement("div")
                 element.innerHTML = data.html
                 
+                // Get filename based on username
+                const usernameClean = user?.username ? user.username.toLowerCase().replace(/[^a-z0-9_-]/g, "") : "user"
+                const filename = `${usernameClean}_resume.pdf`
+
                 // Configure options for A4 high quality layout
                 const opt = {
                     margin: 10,
-                    filename: `resume_${interviewReportId}.pdf`,
+                    filename: filename,
                     image: { type: "jpeg", quality: 0.98 },
                     html2canvas: { scale: 2, useCORS: true },
                     jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
@@ -83,9 +88,7 @@ export const useInterview = () => {
 
                 // Generate and save PDF directly to Downloads folder
                 await html2pdf().set(opt).from(element).save()
-                
-                // Alert popup to notify the user
-                alert("Your resume has been successfully downloaded!")
+                return true
             }
         }
         catch (error) {
@@ -93,6 +96,7 @@ export const useInterview = () => {
         } finally {
             setLoading(false)
         }
+        return false
     }
 
     useEffect(() => {
